@@ -4,37 +4,36 @@
 
 var data = data;
 var membersArray = data.results[0].members;
-var keysArray = ["first_name", "last_name", "middle_name", "party", "state", "seniority", "votes_with_party_pct"];
+var keysArray = [["url", "first_name", "last_name", "middle_name"], "party", "state", "seniority", "votes_with_party_pct"];
 
 function createTable(paramMembersArray) {
-    var table,
+    var tbody,
         tr,
         td,
         a;
-    table = document.getElementById("senate-data");
+    tbody = document.getElementById("congress-data");
     for (var i = 0; i < paramMembersArray.length; i++) {
         tr = document.createElement("tr");
         for (var j = 0; j < keysArray.length; j++) {
             td = document.createElement("td");
             if (j === 0) {
                 a = document.createElement("a");
-                a.setAttribute("href",paramMembersArray[i]["url"]);
-                a.textContent = paramMembersArray[i][keysArray[j]];
-                j++;
-                a.textContent += " " + paramMembersArray[i][keysArray[j]];
-                j++;
-                if(paramMembersArray[i][keysArray[j]] != null){
-                    a.textContent += " " + paramMembersArray[i]["middle_name"];
+                a.setAttribute("href",paramMembersArray[i][keysArray[j][0]]);
+                a.setAttribute("target","_blank");
+                a.textContent = paramMembersArray[i][keysArray[j][1]];
+                a.textContent += " " + paramMembersArray[i][keysArray[j][2]];
+                if(paramMembersArray[i][keysArray[j][3]] != null){
+                    a.textContent += " " + paramMembersArray[i][keysArray[j][3]];
                 }
                 td.appendChild(a);
-            } else if (j===6){
+            } else if (j===keysArray.length-1){
                 td.textContent = paramMembersArray[i][keysArray[j]] + "%";
             } else {
                 td.textContent = paramMembersArray[i][keysArray[j]];
             }
             tr.appendChild(td);
         }
-        table.appendChild(tr);
+        tbody.appendChild(tr);
     }
 }
 
