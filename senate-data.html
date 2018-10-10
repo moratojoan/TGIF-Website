@@ -12,11 +12,11 @@
 </head>
 
 <body>
-    <header class="my_header">
+    <header class="senate my_header">
         <div class="container">
             <div class="my_header_div">
                 <h1>TGIF</h1>
-                <a href="mailto:info@tgit.net"><img src="images/email_icon.png" alt="email_logo">info@tgif.net</a>
+                <a href="mailto:info@tgit.net"><img class="email_image" src="images/email_icon.png" alt="email_logo">info@tgif.net</a>
             </div>
         </div>
     </header>
@@ -24,7 +24,7 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li class="active dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Congress 133 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="house-data.html">House</a></li>
@@ -34,9 +34,25 @@
                 </ul>
             </div>
         </nav>
-        <div class="page_content">
+        <div>
             <h2>Senators</h2>
             <p class="main_paragraf">First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S. Constitution. Each state is represented by two senators, regardless of population, who serve staggered six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet secretaries, federal judges, other federal executive officials, military officers, regulatory officials, ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the House.</p>
+            <div class="filters">
+                <div class="label_party">
+                    <label>Filter by party:</label>
+                    <label><input type="checkbox" name="party" value="Democrat" id="checkBoxD"> Democrat</label>
+                    <label><input type="checkbox" name="party" value="Republican" id="checkBoxR"> Republicant</label>
+                    <label><input type="checkbox" name="party" value="Independent" id="checkBoxI"> Independent</label>
+                </div>
+                <div>
+                    <select name="OlderYounger">
+                        <option value="Everybody" selected>Everybody</option>
+                        <option value="Older than 30">Older than 30</option>
+                        <option value="Younger than 30">Younger than 30</option>
+                    </select>
+                </div>
+            </div>
+
             <table class="table">
                 <thead>
                     <tr>
