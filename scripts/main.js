@@ -9,39 +9,74 @@ if (page == "senate" || page == "house") {
     var data = data;
     var membersArray = data.results[0].members;
     var keysArray = [["url", "first_name", "last_name", "middle_name"], "party", "state", "seniority", "votes_with_party_pct"];
-    createTable(membersArray);
+    var filterParty = [];
+    var filterState = "Select";
+    createTable(membersArray, filterParty, filterState);
     createDropdownMenu(membersArray);
 }
 
-function createTable(paramMembersArray) {
+function createTable(paramMembersArray, paramFilterParty, paramFilterState) {
     var tbody,
         tr,
         td,
-        a;
+        a,
+        i,
+        k,
+        j;
     tbody = document.getElementById("congress-data");
-    for (var i = 0; i < paramMembersArray.length; i++) {
-        tr = document.createElement("tr");
-        for (var j = 0; j < keysArray.length; j++) {
-            td = document.createElement("td");
-            if (j === 0) {
-                a = document.createElement("a");
-                a.setAttribute("href", paramMembersArray[i][keysArray[j][0]]);
-                a.setAttribute("target", "_blank");
-                a.textContent = paramMembersArray[i][keysArray[j][1]];
-                a.textContent += " " + paramMembersArray[i][keysArray[j][2]];
-                if (paramMembersArray[i][keysArray[j][3]] != null) {
-                    a.textContent += " " + paramMembersArray[i][keysArray[j][3]];
+
+    //Clear tbody
+    while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+    }
+
+    //Fill tbody
+    for (i = 0; i < paramMembersArray.length; i++) {
+        var memeberFulfilParty = false;
+
+        if (paramFilterParty.length == 0) {
+            memeberFulfilParty = true;
+        } else {
+            for (k = 0; k < paramFilterParty.length; k++) {
+                if (paramMembersArray[i].party == paramFilterParty[k]) {
+                    memeberFulfilParty = true;
                 }
-                td.appendChild(a);
-            } else if (j === keysArray.length - 1) {
-                td.textContent = paramMembersArray[i][keysArray[j]] + "%";
-            } else {
-                td.textContent = paramMembersArray[i][keysArray[j]];
             }
-            tr.appendChild(td);
         }
-        tr.setAttribute("class", paramMembersArray[i].party + " " + paramMembersArray[i].state);
-        tbody.appendChild(tr);
+
+        var memberFulfilState = false;
+        if (paramFilterState == "Select") {
+            memberFulfilState = true;
+        } else {
+            if (paramMembersArray[i].state == paramFilterState) {
+                memberFulfilState = true;
+            }
+        }
+
+        if (memeberFulfilParty && memberFulfilState) {
+            tr = document.createElement("tr");
+            for (j = 0; j < keysArray.length; j++) {
+                td = document.createElement("td");
+                if (j === 0) {
+                    a = document.createElement("a");
+                    a.setAttribute("href", paramMembersArray[i][keysArray[j][0]]);
+                    a.setAttribute("target", "_blank");
+                    a.textContent = paramMembersArray[i][keysArray[j][1]];
+                    a.textContent += " " + paramMembersArray[i][keysArray[j][2]];
+                    if (paramMembersArray[i][keysArray[j][3]] != null) {
+                        a.textContent += " " + paramMembersArray[i][keysArray[j][3]];
+                    }
+                    td.appendChild(a);
+                } else if (j === keysArray.length - 1) {
+                    td.textContent = paramMembersArray[i][keysArray[j]] + "%";
+                } else {
+                    td.textContent = paramMembersArray[i][keysArray[j]];
+                }
+                tr.appendChild(td);
+            }
+            tr.setAttribute("class", paramMembersArray[i].party + " " + paramMembersArray[i].state);
+            tbody.appendChild(tr);
+        }
     }
 }
 
@@ -76,6 +111,45 @@ function listStates(paramMembersArray) {
     return states;
 }
 
+//CheckBoxes && DropDown
+if (page == "senate") {
+    var checkBoxIdArray = ["checkBoxD", "checkBoxR", "checkBoxI"];
+    var trId = ["D", "R", "I"];
+    var checkBox = [];
+    for (var j = 0; j < checkBoxIdArray.length; j++) {
+        checkBox.push(document.getElementById(checkBoxIdArray[j]));
+    }
+
+    for (j = 0; j < checkBox.length; j++) {
+        checkBox[j].onchange = function () {
+            createParamsToCreateTable()
+        }
+    }
+
+    var trClassArrayState = listStates(membersArray);
+    var trState = [];
+    for (var k = 0; k < trClassArrayState.length; k++) {
+        trState.push(document.getElementsByClassName(trClassArrayState[k]));
+    }
+    var select = document.getElementsByTagName("select");
+    select[0].onchange = function () {
+        createParamsToCreateTable()
+    }
+}
+
+function createParamsToCreateTable() {
+    var filterParty = [];
+    for (var i = 0; i < checkBox.length; i++) {
+        if (checkBox[i].checked) {
+            filterParty.push(trId[i]);
+        }
+    }
+
+    var filterState = select[0].selectedOptions[0].value;
+    
+    createTable(membersArray, filterParty, filterState);
+}
+
 //Function to change the Read more.. to Read less...
 if (page == "home") {
     var a = [document.getElementById("about_colapse"), document.getElementById("history_colapse")];
@@ -92,181 +166,5 @@ function MoreLess(id) {
         aClicked.textContent = "Read less...";
     } else {
         aClicked.textContent = "Read more...";
-    }
-}
-
-
-//Filter by Party Option 1:
-//if (page == "senate") {
-//    var checkBoxD = document.getElementById("checkBoxD");
-//    var checkBoxR = document.getElementById("checkBoxR");
-//    var checkBoxI = document.getElementById("checkBoxI");
-//    var checkBox = [checkBoxD, checkBoxR, checkBoxI];
-//    var trD = document.getElementsByClassName("D");
-//    var trR = document.getElementsByClassName("R");
-//    var trI = document.getElementsByClassName("I");
-//
-//    for (var j = 0; j < checkBox.length; j++) {
-//        checkBox[j].onchange = function () {
-//            filterByParty()
-//        }
-//    }
-//}
-//
-//function filterByParty() {
-//    var checkBoxChecked = detectCheckBoxChecked(checkBox);
-//    if (checkBoxChecked.length == 0 || checkBoxChecked.length == checkBox.length) {
-//        for (i = 0; i < trD.length; i++) {
-//            trD[i].style.display = "table-row";
-//        }
-//        for (i = 0; i < trR.length; i++) {
-//            trR[i].style.display = "table-row";
-//        }
-//        for (i = 0; i < trI.length; i++) {
-//            trI[i].style.display = "table-row";
-//        }
-//    } else {
-//        var isDChecked = false;
-//        var isRChecked = false;
-//        var isIChecked = false;
-//        for (i = 0; i < checkBoxChecked.length; i++) {
-//            if (checkBoxChecked[i].id == "checkBoxD") {
-//                isDChecked = true;
-//            } else if (checkBoxChecked[i].id == "checkBoxR") {
-//                isRChecked = true;
-//            } else if (checkBoxChecked[i].id == "checkBoxI") {
-//                isIChecked = true;
-//            }
-//        }
-//        if (isDChecked) {
-//            for (i = 0; i < trD.length; i++) {
-//                trD[i].style.display = "table-row";
-//            }
-//        } else {
-//            for (i = 0; i < trD.length; i++) {
-//                trD[i].style.display = "none";
-//            }
-//        }
-//
-//        if (isRChecked) {
-//            for (i = 0; i < trR.length; i++) {
-//                trR[i].style.display = "table-row";
-//            }
-//        } else {
-//            for (i = 0; i < trR.length; i++) {
-//                trR[i].style.display = "none";
-//            }
-//        }
-//
-//        if (isIChecked) {
-//            for (i = 0; i < trI.length; i++) {
-//                trI[i].style.display = "table-row";
-//            }
-//        } else {
-//            for (i = 0; i < trI.length; i++) {
-//                trI[i].style.display = "none";
-//            }
-//        }
-//    }
-//}
-//
-//function detectCheckBoxChecked(checkBoxArray) {
-//    var checkBoxChecked = [];
-//    for (var i = 0; i < checkBoxArray.length; i++) {
-//        if (checkBoxArray[i].checked) {
-//            checkBoxChecked.push(checkBoxArray[i]);
-//        }
-//    }
-//    return checkBoxChecked;
-//}
-
-//Filter by Party Option 2:
-if (page == "senate") {
-    var checkBoxIdArray = ["checkBoxD", "checkBoxR", "checkBoxI"];
-    var checkBox = [];
-    var trClassArrayParty = ["D", "R", "I"];
-    var trParty = [];
-    for (var j = 0; j < checkBoxIdArray.length; j++) {
-        checkBox.push(document.getElementById(checkBoxIdArray[j]));
-        trParty.push(document.getElementsByClassName(trClassArrayParty[j]));
-    }
-
-    for (j = 0; j < checkBox.length; j++) {
-        checkBox[j].onchange = function () {
-            filterByParty()
-        }
-    }
-}
-
-function filterByParty() {
-    var checkBoxChecked = detectCheckBoxChecked(checkBox);
-    if (checkBoxChecked.length == 0 || checkBoxChecked.length == checkBox.length) {
-        for (var i = 0; i < trParty.length; i++) {
-            for (var j = 0; j < trParty[i].length; j++) {
-                trParty[i][j].style.display = "table-row";
-            }
-        }
-    } else {
-        for (var k = 0; k < trParty.length; k++) {
-            for (var l = 0; l < trParty[k].length; l++) {
-                trParty[k][l].style.display = "none";
-            }
-        }
-        for (var m = 0; m < checkBoxIdArray.length; m++) { //loop id checkbox
-            for (var n = 0; n < checkBoxChecked.length; n++) { //loop id checkboxChecked
-                if (checkBoxIdArray[m] == checkBoxChecked[n].id) {
-                    for (var p = 0; p < trParty[m].length; p++) {
-                        trParty[m][p].style.display = "table-row";
-                    }
-                }
-            }
-        }
-    }
-}
-
-function detectCheckBoxChecked(checkBoxArray) {
-    var checkBoxChecked = [];
-    for (var i = 0; i < checkBoxArray.length; i++) {
-        if (checkBoxArray[i].checked) {
-            checkBoxChecked.push(checkBoxArray[i]);
-        }
-    }
-    return checkBoxChecked;
-}
-
-//Filter by State:
-if (page == "senate") {
-    var trClassArrayState = listStates(membersArray);
-    var trState = [];
-    for (var k = 0; k < trClassArrayState.length; k++) {
-        trState.push(document.getElementsByClassName(trClassArrayState[k]));
-    }
-    var select = document.getElementsByTagName("select");
-    select[0].onchange = function () {
-        FilterByState(this.value)
-    }
-}
-
-function FilterByState(stateSelected) {
-    var i,
-        j;
-    if (stateSelected == "Select") {
-        for (i = 0; trState.length; i++) {
-            for (j = 0; j < trState[i].length; j++) {
-                trState[i][j].style.display = "table-row";
-            }
-        }
-    } else {
-        for (i = 0; i<trState.length; i++) {
-            if (trState[i][0].className.split(" ")[1] != stateSelected) {
-                for (j = 0; j < trState[i].length; j++) {
-                    trState[i][j].style.display = "none";
-                }
-            } else {
-                for (j = 0; j < trState[i].length; j++) {
-                    trState[i][j].style.display = "table-row";
-                }
-            }
-        }
     }
 }
