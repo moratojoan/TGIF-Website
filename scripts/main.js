@@ -10,6 +10,7 @@ if (page == "senate" || page == "house") {
     var membersArray = data.results[0].members;
     var keysArray = [["url", "first_name", "last_name", "middle_name"], "party", "state", "seniority", "votes_with_party_pct"];
     createTable(membersArray);
+    createDropdownMenu(membersArray);
 }
 
 function createTable(paramMembersArray) {
@@ -39,11 +40,41 @@ function createTable(paramMembersArray) {
             }
             tr.appendChild(td);
         }
-        tr.setAttribute("class", paramMembersArray[i].party);
+        tr.setAttribute("class", paramMembersArray[i].party + " " + paramMembersArray[i].state);
         tbody.appendChild(tr);
     }
 }
 
+function createDropdownMenu(paramMembersArray) {
+    var select,
+        option,
+        states;
+    select = document.getElementsByTagName("select")[0];
+    states = listStates(paramMembersArray);
+    for (var i = 0; i < states.length; i++) {
+        option = document.createElement("option");
+        option.textContent = states[i];
+        option.setAttribute("value", states[i]);
+        select.appendChild(option);
+    }
+}
+
+function listStates(paramMembersArray) {
+    var states = [];
+    for (var i = 0; i < paramMembersArray.length; i++) {
+        var isAlreadyAdded = false;
+        for (var j = 0; j < states.length; j++) {
+            if (paramMembersArray[i].state == states[j]) {
+                isAlreadyAdded = true;
+            }
+        }
+        if (!isAlreadyAdded) {
+            states.push(paramMembersArray[i].state);
+        }
+    }
+    states.sort();
+    return states;
+}
 
 //Function to change the Read more.. to Read less...
 if (page == "home") {
@@ -65,7 +96,7 @@ function MoreLess(id) {
 }
 
 
-//Filter by Party:
+//Filter by Party Option 1:
 //if (page == "senate") {
 //    var checkBoxD = document.getElementById("checkBoxD");
 //    var checkBoxR = document.getElementById("checkBoxR");
@@ -149,14 +180,15 @@ function MoreLess(id) {
 //    return checkBoxChecked;
 //}
 
+//Filter by Party Option 2:
 if (page == "senate") {
     var checkBoxIdArray = ["checkBoxD", "checkBoxR", "checkBoxI"];
     var checkBox = [];
-    var trClassArray = ["D", "R", "I"];
-    var tr = [];
+    var trClassArrayParty = ["D", "R", "I"];
+    var trParty = [];
     for (var j = 0; j < checkBoxIdArray.length; j++) {
         checkBox.push(document.getElementById(checkBoxIdArray[j]));
-        tr.push(document.getElementsByClassName(trClassArray[j]));
+        trParty.push(document.getElementsByClassName(trClassArrayParty[j]));
     }
 
     for (j = 0; j < checkBox.length; j++) {
@@ -169,22 +201,22 @@ if (page == "senate") {
 function filterByParty() {
     var checkBoxChecked = detectCheckBoxChecked(checkBox);
     if (checkBoxChecked.length == 0 || checkBoxChecked.length == checkBox.length) {
-        for (var k = 0; k < tr.length; k++) {
-            for (var l = 0; l < tr[k].length; l++) {
-                tr[k][l].style.display = "table-row";
+        for (var i = 0; i < trParty.length; i++) {
+            for (var j = 0; j < trParty[i].length; j++) {
+                trParty[i][j].style.display = "table-row";
             }
         }
     } else {
-        for (var p = 0; p < tr.length; p++) {
-            for (var r = 0; r < tr[p].length; r++) {
-                tr[p][r].style.display = "none";
+        for (var k = 0; k < trParty.length; k++) {
+            for (var l = 0; l < trParty[k].length; l++) {
+                trParty[k][l].style.display = "none";
             }
         }
-        for (var m = 0; m < checkBoxIdArray.length; m++) {
-            for (var n = 0; n < checkBoxIdArray.length; n++) {
+        for (var m = 0; m < checkBoxIdArray.length; m++) { //loop id checkbox
+            for (var n = 0; n < checkBoxChecked.length; n++) { //loop id checkboxChecked
                 if (checkBoxIdArray[m] == checkBoxChecked[n].id) {
-                    for (var s = 0; s < tr[m].length; s++) {
-                        tr[m][s].style.display = "table-row";
+                    for (var p = 0; p < trParty[m].length; p++) {
+                        trParty[m][p].style.display = "table-row";
                     }
                 }
             }
@@ -200,4 +232,41 @@ function detectCheckBoxChecked(checkBoxArray) {
         }
     }
     return checkBoxChecked;
+}
+
+//Filter by State:
+if (page == "senate") {
+    var trClassArrayState = listStates(membersArray);
+    var trState = [];
+    for (var k = 0; k < trClassArrayState.length; k++) {
+        trState.push(document.getElementsByClassName(trClassArrayState[k]));
+    }
+    var select = document.getElementsByTagName("select");
+    select[0].onchange = function () {
+        FilterByState(this.value)
+    }
+}
+
+function FilterByState(stateSelected) {
+    var i,
+        j;
+    if (stateSelected == "Select") {
+        for (i = 0; trState.length; i++) {
+            for (j = 0; j < trState[i].length; j++) {
+                trState[i][j].style.display = "table-row";
+            }
+        }
+    } else {
+        for (i = 0; i<trState.length; i++) {
+            if (trState[i][0].className.split(" ")[1] != stateSelected) {
+                for (j = 0; j < trState[i].length; j++) {
+                    trState[i][j].style.display = "none";
+                }
+            } else {
+                for (j = 0; j < trState[i].length; j++) {
+                    trState[i][j].style.display = "table-row";
+                }
+            }
+        }
+    }
 }

@@ -38,17 +38,16 @@
             <h2>Senators</h2>
             <p class="main_paragraf">First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S. Constitution. Each state is represented by two senators, regardless of population, who serve staggered six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet secretaries, federal judges, other federal executive officials, military officers, regulatory officials, ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the House.</p>
             <div class="filters">
-                <div class="label_party">
-                    <label>Filter by party:</label>
+                <div class="filterParty">
+                    <label>Filter by Party:</label>
                     <label><input type="checkbox" name="party" value="Democrat" id="checkBoxD"> Democrat</label>
                     <label><input type="checkbox" name="party" value="Republican" id="checkBoxR"> Republicant</label>
                     <label><input type="checkbox" name="party" value="Independent" id="checkBoxI"> Independent</label>
                 </div>
-                <div>
-                    <select name="OlderYounger">
-                        <option value="Everybody" selected>Everybody</option>
-                        <option value="Older than 30">Older than 30</option>
-                        <option value="Younger than 30">Younger than 30</option>
+                <div class="filterState">
+                   <label>Filter by State:</label>
+                    <select name="State">
+                        <option value="Select" selected>Select an state..</option>
                     </select>
                 </div>
             </div>
@@ -74,7 +73,7 @@
     </footer>
 
     <script src="scripts/pro-congress-113-senate.js"></script>
-    <script src="scripts/main.js"></script>
+    <script src="scripts/main2.js"></script>
 </body>
 
 </html>

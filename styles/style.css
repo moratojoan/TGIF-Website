@@ -34,6 +34,10 @@
     width: 60%;
 }
 
+th:first-child{
+    width: 312px;
+}
+
 footer {
     display: flex;
     justify-content: center;
@@ -54,4 +58,26 @@ label {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.filterParty {
+    width: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.filterState {
+    margin-left: 60px;
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+select {
+    max-height: 50px;
 }
