@@ -21,7 +21,6 @@ function createTable(paramMembersArray, paramFilterParty, paramFilterState) {
         td,
         a,
         i,
-        k,
         j;
     tbody = document.getElementById("congress-data");
 
@@ -32,28 +31,7 @@ function createTable(paramMembersArray, paramFilterParty, paramFilterState) {
 
     //Fill tbody
     for (i = 0; i < paramMembersArray.length; i++) {
-        var memeberFulfilParty = false;
-
-        if (paramFilterParty.length == 0) {
-            memeberFulfilParty = true;
-        } else {
-            for (k = 0; k < paramFilterParty.length; k++) {
-                if (paramMembersArray[i].party == paramFilterParty[k]) {
-                    memeberFulfilParty = true;
-                }
-            }
-        }
-
-        var memberFulfilState = false;
-        if (paramFilterState == "Select") {
-            memberFulfilState = true;
-        } else {
-            if (paramMembersArray[i].state == paramFilterState) {
-                memberFulfilState = true;
-            }
-        }
-
-        if (memeberFulfilParty && memberFulfilState) {
+        if (memberFulfilFilters(paramMembersArray[i], paramFilterParty, paramFilterState)) {
             tr = document.createElement("tr");
             for (j = 0; j < keysArray.length; j++) {
                 td = document.createElement("td");
@@ -77,6 +55,13 @@ function createTable(paramMembersArray, paramFilterParty, paramFilterState) {
             tr.setAttribute("class", paramMembersArray[i].party + " " + paramMembersArray[i].state);
             tbody.appendChild(tr);
         }
+    }
+    
+    //If there aren't any row added
+    if (!tbody.firstChild){
+        var p = document.createElement("p");
+        p.textContent = "There is no member";
+        tbody.appendChild(p);
     }
 }
 
@@ -111,13 +96,12 @@ function listStates(paramMembersArray) {
     return states;
 }
 
-//CheckBoxes && DropDown
-if (page == "senate") {
-    var checkBoxIdArray = ["checkBoxD", "checkBoxR", "checkBoxI"];
-    var trId = ["D", "R", "I"];
+//Filters: CheckBoxes && DropDown
+if (page == "senate" || page == "house") {
+    var checkBoxClassNameArray = ["checkBoxD", "checkBoxR", "checkBoxI"];
     var checkBox = [];
-    for (var j = 0; j < checkBoxIdArray.length; j++) {
-        checkBox.push(document.getElementById(checkBoxIdArray[j]));
+    for (var j = 0; j < checkBoxClassNameArray.length; j++) {
+        checkBox.push(document.getElementsByClassName(checkBoxClassNameArray[j])[0]);
     }
 
     for (j = 0; j < checkBox.length; j++) {
@@ -126,11 +110,7 @@ if (page == "senate") {
         }
     }
 
-    var trClassArrayState = listStates(membersArray);
-    var trState = [];
-    for (var k = 0; k < trClassArrayState.length; k++) {
-        trState.push(document.getElementsByClassName(trClassArrayState[k]));
-    }
+
     var select = document.getElementsByTagName("select");
     select[0].onchange = function () {
         createParamsToCreateTable()
@@ -138,6 +118,7 @@ if (page == "senate") {
 }
 
 function createParamsToCreateTable() {
+    var trId = ["D", "R", "I"];
     var filterParty = [];
     for (var i = 0; i < checkBox.length; i++) {
         if (checkBox[i].checked) {
@@ -146,8 +127,37 @@ function createParamsToCreateTable() {
     }
 
     var filterState = select[0].selectedOptions[0].value;
-    
+
     createTable(membersArray, filterParty, filterState);
+}
+
+function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
+    var memeberFulfilParty = false;
+
+    if (paramFilterParty.length == 0) {
+        memeberFulfilParty = true;
+    } else {
+        for (var k = 0; k < paramFilterParty.length; k++) {
+            if (member.party == paramFilterParty[k]) {
+                memeberFulfilParty = true;
+            }
+        }
+    }
+
+    var memberFulfilState = false;
+    if (paramFilterState == "Select") {
+        memberFulfilState = true;
+    } else {
+        if (member.state == paramFilterState) {
+            memberFulfilState = true;
+        }
+    }
+    
+    if (memeberFulfilParty && memberFulfilState){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 //Function to change the Read more.. to Read less...
