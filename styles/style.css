@@ -34,7 +34,7 @@
     width: 60%;
 }
 
-th:first-child{
+.tableMembers th:first-child{
     width: 312px;
 }
 
@@ -80,4 +80,8 @@ label {
 
 select {
     max-height: 50px;
+}
+
+.width45{
+    width: 45%;
 }

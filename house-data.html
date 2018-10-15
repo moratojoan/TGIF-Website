@@ -6,8 +6,6 @@
     <title>House Data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 
@@ -31,6 +29,18 @@
                             <li><a href="senate-data.html">Senate</a></li>
                         </ul>
                     </li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Attendance <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">House</a></li>
+                            <li><a href="senate-attendance-statistics.html">Senate</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Party Loyalty <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">House</a></li>
+                            <li><a href="senate-party-loyalty-statistics.html">Senate</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -52,7 +62,7 @@
                     </select>
                 </div>
             </div>
-            <table class="table">
+            <table class="table tableMembers">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -72,6 +82,8 @@
         <p>&copy; 2018 TGIF | All rights reserved</p>
     </footer>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="scripts/pro-congress-113-house.js"></script>
     <script src="scripts/main.js"></script>
 </body>

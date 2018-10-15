@@ -153,11 +153,7 @@ function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
         }
     }
     
-    if (memeberFulfilParty && memberFulfilState){
-        return true;
-    }else{
-        return false;
-    }
+    return memeberFulfilParty && memberFulfilState
 }
 
 //Function to change the Read more.. to Read less...
