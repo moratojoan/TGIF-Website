@@ -85,3 +85,8 @@ select {
 .width45{
     width: 45%;
 }
+
+.linea {
+    width: 100%;
+    border-bottom: solid thin;
+}

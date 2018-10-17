@@ -40,10 +40,10 @@ function createTable(paramMembersArray, paramFilterParty, paramFilterState) {
                     a.setAttribute("href", paramMembersArray[i][keysArray[j][0]]);
                     a.setAttribute("target", "_blank");
                     a.textContent = paramMembersArray[i][keysArray[j][1]];
-                    a.textContent += " " + paramMembersArray[i][keysArray[j][2]];
                     if (paramMembersArray[i][keysArray[j][3]] != null) {
                         a.textContent += " " + paramMembersArray[i][keysArray[j][3]];
                     }
+                    a.textContent += " " + paramMembersArray[i][keysArray[j][2]];
                     td.appendChild(a);
                 } else if (j === keysArray.length - 1) {
                     td.textContent = paramMembersArray[i][keysArray[j]] + "%";
@@ -56,9 +56,9 @@ function createTable(paramMembersArray, paramFilterParty, paramFilterState) {
             tbody.appendChild(tr);
         }
     }
-    
+
     //If there aren't any row added
-    if (!tbody.firstChild){
+    if (!tbody.firstChild) {
         var p = document.createElement("p");
         p.textContent = "There is no member";
         tbody.appendChild(p);
@@ -152,7 +152,7 @@ function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
             memberFulfilState = true;
         }
     }
-    
+
     return memeberFulfilParty && memberFulfilState
 }
 
