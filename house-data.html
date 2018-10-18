@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <header class="house my_header">
+    <header data-page="house-data" class="my_header">
         <div class="container">
             <div class="my_header_div">
                 <h1>TGIF</h1>
@@ -51,14 +51,14 @@
             <div class="filters">
                 <div class="filterParty">
                     <label>Filter by Party:</label>
-                    <label><input type="checkbox" name="party" value="Democrat" class="checkBoxD"> Democrat</label>
-                    <label><input type="checkbox" name="party" value="Republican" class="checkBoxR"> Republicant</label>
-                    <label><input type="checkbox" name="party" value="Independent" class="checkBoxI"> Independent</label>
+                    <label><input type="checkbox" name="party" value="Democrat" class="checkBoxFilter"> Democrat</label>
+                    <label><input type="checkbox" name="party" value="Republican" class="checkBoxFilter"> Republicant</label>
+                    <label><input type="checkbox" name="party" value="Independent" class="checkBoxFilter"> Independent</label>
                 </div>
                 <div class="filterState">
                     <label>Filter by State:</label>
                     <select name="State">
-                        <option value="Select" selected>Select an state..</option>
+                        <option value="Select" selected>All States</option>
                     </select>
                 </div>
             </div>

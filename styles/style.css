@@ -71,7 +71,7 @@ label {
 
 .filterState {
     margin-left: 60px;
-    width: 250px;
+    width: 190px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
