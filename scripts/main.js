@@ -2,11 +2,13 @@
 /* eslint "no-console": "off"  */
 /* global$ */
 
+//------------------MAIN----------------------MAIN-----------------------------MAIN--------------
+//------------------MAIN----------------------MAIN-----------------------------MAIN--------------
+//------------------MAIN----------------------MAIN-----------------------------MAIN--------------
+
 //START: VAR GLOBALS
 var page = document.querySelector('[data-page]').dataset.page;
-var i;
 //FINISH: VAR GLOBALS
-
 
 //START: GET DATA
 if (page == "senate-data" || page == "house-data" || page == "senate-attendance" || page == "senate-party-loyalty" || page == "house-party-loyalty" || page == "house-attendance") {
@@ -17,10 +19,10 @@ if (page == "senate-data" || page == "house-data" || page == "senate-attendance"
 
 //START PAGE: INDEX
 if (page == "home") {
-    var a = [document.getElementById("about_colapse"), document.getElementById("history_colapse")];
-    for (i = 0; i < a.length; i++) {
+    var a = document.getElementsByClassName("colapseMoreLess");
+    for (let i = 0; i < a.length; i++) {
         a[i].onclick = function () {
-            moreLess(this.id)
+            moreLess(i)
         }
     }
 }
@@ -29,19 +31,20 @@ if (page == "home") {
 //START PAGES: SENATE-DATA, HOUSE-DATA
 if (page == "senate-data" || page == "house-data") {
     //Filters by: CheckBoxes, DropDown
-    var checkBox = document.getElementsByClassName("checkBoxFilter");
-    for (i = 0; i < checkBox.length; i++) {
+    var checkBox = document.getElementsByTagName("input");
+    var select = document.getElementsByTagName("select");
+
+    for (let i = 0; i < checkBox.length; i++) {
         checkBox[i].onchange = function () {
-            createMembersTable(membersArray)
+            createMembersTable(membersArray, checkBox, select)
         }
     }
-    var select = document.getElementsByTagName("select");
     select[0].onchange = function () {
-        createMembersTable(membersArray)
+        createMembersTable(membersArray, checkBox, select)
     }
 
     //Create Table, Create DropDownMenu
-    createMembersTable(membersArray);
+    createMembersTable(membersArray, checkBox, select);
     createDropdownMenu(membersArray);
 }
 //FINISH PAGES: SENATE-DATA, HOUSE-DATA
@@ -52,7 +55,7 @@ if (page == "senate-attendance" || page == "senate-party-loyalty" || page == "ho
     var democratsArray = [];
     var republicantsArray = [];
     var independentsArray = [];
-    for (i = 0; i < membersArray.length; i++) {
+    for (let i = 0; i < membersArray.length; i++) {
         switch (membersArray[i].party) {
             case "D":
                 democratsArray.push(membersArray[i]);
@@ -79,7 +82,7 @@ if (page == "senate-attendance" || page == "senate-party-loyalty" || page == "ho
     }
 
     //Plain table Senate/House at a place
-    plainAtAPlace();
+    //plainAtAPlace(statistics);
 }
 
 if (page == "senate-party-loyalty" || page == "house-party-loyalty") {
@@ -88,6 +91,7 @@ if (page == "senate-party-loyalty" || page == "house-party-loyalty") {
     statistics.members_most_loyal = statisticsLeastMost(membersArray.slice(), 10, "HighestToSmallest", "votes_with_party_pct", "total_votes");
 
     //Plain Tbodys
+    plainTbody("tbody_sumary",plainAtAPlace2(statistics));
     plainTbody("tbody_least", statistics.members_least_loyal);
     plainTbody("tbody_most", statistics.members_most_loyal);
 } else if (page == "senate-attendance" || page == "house-attendance") {
@@ -96,6 +100,7 @@ if (page == "senate-party-loyalty" || page == "house-party-loyalty") {
     statistics.members_most_engaged = statisticsLeastMost(membersArray.slice(), 10, "SmallestToHighest", "missed_votes_pct", "missed_votes");
 
     //Plain Tbodys
+    plainAtAPlace(statistics);
     plainTbody("tbody_least", statistics.members_least_engaged);
     plainTbody("tbody_most", statistics.members_most_engaged);
 }
@@ -105,9 +110,10 @@ if (page == "senate-party-loyalty" || page == "house-party-loyalty") {
 //---------------FUNCTIONS----------------------FUNCTIONS-----------------------------FUNCTIONS--------------
 //---------------FUNCTIONS----------------------FUNCTIONS-----------------------------FUNCTIONS--------------
 //---------------FUNCTIONS----------------------FUNCTIONS-----------------------------FUNCTIONS--------------
+
 //START PAGE: INDEX
-function moreLess(id) {
-    var aClicked = document.getElementById(id);
+function moreLess(i) {
+    var aClicked = document.getElementsByClassName("colapseMoreLess")[i];
     if (aClicked.textContent == "Read more...") {
         aClicked.textContent = "Read less...";
     } else {
@@ -117,16 +123,9 @@ function moreLess(id) {
 //FINISH PAGE: INDEX
 
 //START PAGES: SENATE-DATA, HOUSE-DATA
-function createMembersTable(paramMembersArray) {
-    var tbody,
-        tr,
-        td,
-        a,
-        i,
-        j;
-
+function createMembersTable(paramMembersArray, paramcheckBox, paramselect) {
     //Get and clear tbody
-    tbody = document.getElementById("congress-data");
+    var tbody = document.getElementById("congress-data");
     while (tbody.firstChild) {
         tbody.removeChild(tbody.firstChild);
     }
@@ -134,8 +133,8 @@ function createMembersTable(paramMembersArray) {
     //Get filter parameters
     var trId = ["D", "R", "I"];
     var filterParty = [];
-    for (i = 0; i < checkBox.length; i++) {
-        if (checkBox[i].checked) {
+    for (let i = 0; i < paramcheckBox.length; i++) {
+        if (paramcheckBox[i].checked) {
             filterParty.push(trId[i]);
         }
     }
@@ -143,13 +142,13 @@ function createMembersTable(paramMembersArray) {
 
     //Fill tbody
     var keysArray = [["url", "first_name", "middle_name", "last_name"], "party", "state", "seniority", "votes_with_party_pct"];
-    for (i = 0; i < paramMembersArray.length; i++) {
+    for (let i = 0; i < paramMembersArray.length; i++) {
         if (memberFulfilFilters(paramMembersArray[i], filterParty, filterState)) {
-            tr = document.createElement("tr");
-            for (j = 0; j < keysArray.length; j++) {
-                td = document.createElement("td");
+            let tr = document.createElement("tr");
+            for (let j = 0; j < keysArray.length; j++) {
+                let td = document.createElement("td");
                 if (j === 0) {
-                    a = document.createElement("a");
+                    let a = document.createElement("a");
                     a.setAttribute("href", paramMembersArray[i][keysArray[j][0]]);
                     a.setAttribute("target", "_blank");
                     a.textContent = paramMembersArray[i][keysArray[j][1]];
@@ -172,7 +171,7 @@ function createMembersTable(paramMembersArray) {
 
     //If there aren't any row added
     if (!tbody.firstChild) {
-        var p = document.createElement("p");
+        let p = document.createElement("p");
         p.textContent = "There is no member";
         tbody.appendChild(p);
     }
@@ -182,13 +181,10 @@ function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
     var memeberFulfilParty = false;
     if (paramFilterParty.length == 0) {
         memeberFulfilParty = true;
-    } else {
-        for (var k = 0; k < paramFilterParty.length; k++) {
-            if (member.party == paramFilterParty[k]) {
-                memeberFulfilParty = true;
-            }
-        }
+    } else if (paramFilterParty.includes(member.party)) {
+        memeberFulfilParty = true;
     }
+
     var memberFulfilState = false;
     if (paramFilterState == "Select") {
         memberFulfilState = true;
@@ -201,13 +197,10 @@ function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
 }
 
 function createDropdownMenu(paramMembersArray) {
-    var select,
-        option,
-        states;
-    select = document.getElementsByTagName("select")[0];
-    states = listStates(paramMembersArray);
+    var select = document.getElementsByTagName("select")[0];
+    var states = listStates(paramMembersArray);
     for (var i = 0; i < states.length; i++) {
-        option = document.createElement("option");
+        let option = document.createElement("option");
         option.textContent = states[i];
         option.setAttribute("value", states[i]);
         select.appendChild(option);
@@ -216,7 +209,7 @@ function createDropdownMenu(paramMembersArray) {
 
 function listStates(paramMembersArray) {
     var states = [];
-    for (var i = 0; i < paramMembersArray.length; i++) {
+    for (let i = 0; i < paramMembersArray.length; i++) {
         if (!states.includes(paramMembersArray[i].state)) {
             states.push(paramMembersArray[i].state);
         }
@@ -229,7 +222,7 @@ function listStates(paramMembersArray) {
 //START PAGES: SENATE/HOUSE-ATTENDANCE, SENATE/HOUSE-PARTY-LOYALTY
 function getValuesArrayFromObjectsArray(objectsArray, field) {
     var valuesArray = [];
-    for (var i = 0; i < objectsArray.length; i++) {
+    for (let i = 0; i < objectsArray.length; i++) {
         valuesArray.push(objectsArray[i][field]);
     }
     return valuesArray;
@@ -237,7 +230,7 @@ function getValuesArrayFromObjectsArray(objectsArray, field) {
 
 function sumArray(numbersArray) {
     var result = 0;
-    for (var i = 0; i < numbersArray.length; i++) {
+    for (let i = 0; i < numbersArray.length; i++) {
         result = result + numbersArray[i];
     }
     return result;
@@ -258,20 +251,19 @@ function statisticsLeastMost(array, persentage, least_most, property1, property2
             return b[property1] - a[property1];
         });
     }
-    var i = 0;
+    var i = 0; //number of members we want to select
     var actualPersentage = 0;
     while (actualPersentage < persentage) {
-        var lowest = array[i][property1];
-        while (array[i][property1] == lowest) {
+        var lastPosition = array[i][property1];
+        while (array[i][property1] == lastPosition) { //add all the members with the same value
             i++;
         }
         actualPersentage = (i / array.length) * 100;
     }
 
     var selectedArray = [];
-    var full_name;
     for (var j = 0; j < i; j++) {
-        full_name = array[j].first_name;
+        let full_name = array[j].first_name;
         if (array[j].middle_name != null) {
             full_name += " " + array[j].middle_name;
         }
@@ -281,29 +273,40 @@ function statisticsLeastMost(array, persentage, least_most, property1, property2
     return selectedArray;
 }
 
-function plainAtAPlace() {
-    document.getElementsByClassName("cell_R_NoR")[0].textContent = statistics.number_of_republicants;
-    document.getElementsByClassName("cell_D_NoR")[0].textContent = statistics.number_of_democrats;
-    document.getElementsByClassName("cell_I_NoR")[0].textContent = statistics.number_of_independents;
-    document.getElementsByClassName("cell_T_NoR")[0].textContent = statistics.number_total;
+function plainAtAPlace(paramStatitstics) {
+    document.getElementsByClassName("cell_R_NoR")[0].textContent = paramStatitstics.number_of_republicants;
+    document.getElementsByClassName("cell_D_NoR")[0].textContent = paramStatitstics.number_of_democrats;
+    document.getElementsByClassName("cell_I_NoR")[0].textContent = paramStatitstics.number_of_independents;
+    document.getElementsByClassName("cell_T_NoR")[0].textContent = paramStatitstics.number_total;
 
-    document.getElementsByClassName("cell_R_averageVoted")[0].textContent = statistics.average_votes_with_party_pct_R.toFixed(2) + "%";
-    document.getElementsByClassName("cell_D_averageVoted")[0].textContent = statistics.average_votes_with_party_pct_D.toFixed(2) + "%";
+    document.getElementsByClassName("cell_R_averageVoted")[0].textContent = paramStatitstics.average_votes_with_party_pct_R.toFixed(2) + "%";
+    document.getElementsByClassName("cell_D_averageVoted")[0].textContent = paramStatitstics.average_votes_with_party_pct_D.toFixed(2) + "%";
     if (!isNaN(statistics.average_votes_with_party_pct_I)) {
-        document.getElementsByClassName("cell_I_averageVoted")[0].textContent = statistics.average_votes_with_party_pct_I.toFixed(2) + "%";
+        document.getElementsByClassName("cell_I_averageVoted")[0].textContent = paramStatitstics.average_votes_with_party_pct_I.toFixed(2) + "%";
     }
-    document.getElementsByClassName("cell_T_averageVoted")[0].textContent = statistics.average_votes_with_party_pct_T.toFixed(2) + "%";
-
+    document.getElementsByClassName("cell_T_averageVoted")[0].textContent = paramStatitstics.average_votes_with_party_pct_T.toFixed(2) + "%";
 }
 
-function plainTbody(className, arrayOfMembers) {
-    var tbody = document.getElementsByClassName(className)[0];
-    var tr;
-    for (var i = 0; i < arrayOfMembers.length; i++) {
-        tr = document.createElement("tr");
-        var td;
+function plainAtAPlace2(paramStatitstics) {
+    var rowR = ["Republican", paramStatitstics.number_of_republicants, paramStatitstics.average_votes_with_party_pct_R.toFixed(2) + "%"];
+    var rowD = ["Democrat", paramStatitstics.number_of_democrats, paramStatitstics.average_votes_with_party_pct_D.toFixed(2) + "%"];
+    var rowI = ["Independent", paramStatitstics.number_of_independents];
+    if (isNaN(statistics.average_votes_with_party_pct_I)) {
+        rowI.push("--");
+    }else{
+        rowI.push(paramStatitstics.average_votes_with_party_pct_I.toFixed(2) + "%");
+    }
+    var rowT = ["Total", paramStatitstics.number_total, paramStatitstics.average_votes_with_party_pct_T.toFixed(2) + "%"];
+    
+    return [rowR,rowD,rowI,rowT]
+}
+
+function plainTbody(id, arrayOfMembers) {
+    var tbody = document.getElementById(id);
+    for (let i = 0; i < arrayOfMembers.length; i++) {
+        let tr = document.createElement("tr");
         for (var j = 0; j < arrayOfMembers[i].length; j++) {
-            td = document.createElement("td");
+            let td = document.createElement("td");
             td.textContent = arrayOfMembers[i][j];
             tr.appendChild(td);
         }
