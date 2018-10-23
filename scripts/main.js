@@ -2,10 +2,10 @@
 /* eslint "no-console": "off"  */
 /* global$ */
 
-var path = window.location.pathname;
-var page = path.split("/").pop();
-var fileName = location.pathname.split("/").slice(-1)[0];
-console.log(path, page, fileName);
+//var path = window.location.pathname;
+//var page = path.split("/").pop();
+//var fileName = location.pathname.split("/").slice(-1)[0];
+//console.log(path, page, fileName);
 
 var page = document.querySelector('[data-page]').dataset.page;
 var url;
@@ -76,9 +76,10 @@ function main(membersArray) {
             createMembersTable(membersArray, checkBox, select)
         }
 
-        //Create Table, Create DropDownMenu
-        createMembersTable(membersArray, checkBox, select);
+        //Create DropDownMenu
         createDropdownMenu(membersArray);
+        //Create Table
+        createMembersTable(membersArray, checkBox, select);
     }
     //FINISH PAGES: SENATE-DATA, HOUSE-DATA
 
@@ -219,7 +220,7 @@ function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
     }
 
     var memberFulfilState = false;
-    if (paramFilterState == "Select") {
+    if (paramFilterState == "All") {
         memberFulfilState = true;
     } else {
         if (member.state == paramFilterState) {
