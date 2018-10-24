@@ -43,9 +43,9 @@ var app = new Vue({
         },
         memberFulfilFilters: function (member) {
             var paramFilterParty = this.filterParty;
-            var paramFilterState = this.filterState;
+//            var paramFilterState = this.filterState;
             var memeberFulfilParty = false;
-            var memberFulfilState = false;
+//            var memberFulfilState = false;
             
             if (paramFilterParty.length == 0) {
                 memeberFulfilParty = true;
@@ -53,14 +53,15 @@ var app = new Vue({
                 memeberFulfilParty = true;
             }
 
-            if (paramFilterState == "All") {
-                memberFulfilState = true;
-            } else {
-                if (member.state == paramFilterState) {
-                    memberFulfilState = true;
-                }
-            }
-            return memeberFulfilParty && memberFulfilState
+//            if (paramFilterState == "All") {
+//                memberFulfilState = true;
+//            } else {
+//                if (member.state == paramFilterState) {
+//                    memberFulfilState = true;
+//                }
+//            }
+//            return memeberFulfilParty && memberFulfilState
+            return memeberFulfilParty;
         }
     },
     created: function () {
