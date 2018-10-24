@@ -65,13 +65,13 @@
             <div class="filters">
                 <div class="filterParty">
                     <label>Filter by Party:</label>
-                    <label><input type="checkbox" name="party" value="Democrat" v-on:click="updateFilterParty"> Democrat</label>
-                    <label><input type="checkbox" name="party" value="Republican" v-on:click="updateFilterParty"> Republicant</label>
-                    <label><input type="checkbox" name="party" value="Independent" v-on:click="updateFilterParty"> Independent</label>
+                    <label><input type="checkbox" name="party" value="D" v-model="filterParty"> Democrat</label>
+                    <label><input type="checkbox" name="party" value="R" v-model="filterParty"> Republicant</label>
+                    <label><input type="checkbox" name="party" value="I" v-model="filterParty"> Independent</label>
                 </div>
                 <div class="filterState">
                     <label>Filter by State:</label>
-                    <select name="State" v-on:click="updateFilterState">
+                    <select name="State" v-model="filterState">
                         <option value="All" selected>All States</option>
                         <option v-for="state in states" :value="state">{{state}}</option>
                     </select>
@@ -90,13 +90,18 @@
                 </thead>
                 <tbody id="congress-data">
                     <tr v-for="member in members" v-if="memberFulfilFilters(member)">
-                       <td><a v-bind:href="member.url">{{member.first_name}} {{member.middle_name}} {{member.last_name}}</a></td>
+                       <td><a v-bind:href="member.url" target="_blank">{{member.first_name}} {{member.middle_name}} {{member.last_name}}</a></td>
                        <td>{{member.party}}</td>
                        <td>{{member.state}}</td>
                        <td>{{member.seniority}}</td>
                        <td>{{member.votes_with_party_pct}}</td>
                     </tr>
                 </tbody>
+                <tfoot v-if="!anyTR">
+                    <tr>
+                        <td>There is no member</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
