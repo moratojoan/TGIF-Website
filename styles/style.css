@@ -60,6 +60,7 @@ label {
     flex-wrap: wrap;
     margin-top: 50px;
     margin-bottom: 20px;
+    align-items: baseline;
 }
 
 .filterParty {
@@ -78,10 +79,6 @@ label {
     align-items: baseline;
 }
 
-select {
-    max-height: 50px;
-}
-
 .width45 {
     width: 45%;
 }
@@ -92,10 +89,6 @@ select {
 }
 
 /*Loader*/
-.loadContent {
-    display: none;
-}
-
 .lds-spinner {
     color: official;
     margin: auto;

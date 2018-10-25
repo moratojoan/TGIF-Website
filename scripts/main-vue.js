@@ -10,7 +10,8 @@ var app = new Vue({
         states: [],
         filterParty: [],
         filterState: "All",
-        anyTR: true
+        someTR: true,
+        loading: true
     },
     methods: {
         startFetch: function (url) {
@@ -25,56 +26,33 @@ var app = new Vue({
                 })
                 .then(function (myData) {
                     app.members = myData.results[0].members;
-                    app.main()
+                    app.dropDownMenuStates();
+                    app.loading = false;
                 })
         },
-        main: function () {
-            this.dropDownMenuStates();
-            document.getElementsByClassName("lds-spinner")[0].style.display = "none";
-            document.getElementsByClassName("loadContent")[0].style.display = "block";
-        },
         dropDownMenuStates: function () {
-            for (let i = 0; i < this.members.length; i++) {
-                if (!this.states.includes(this.members[i].state)) {
-                    this.states.push(this.members[i].state);
-                }
-            }
-            this.states.sort();
-        },
-        memberFulfilFilters: function (member) {
-            var paramFilterParty = this.filterParty;
-//            var paramFilterState = this.filterState;
-            var memeberFulfilParty = false;
-//            var memberFulfilState = false;
-            
-            if (paramFilterParty.length == 0) {
-                memeberFulfilParty = true;
-            } else if (paramFilterParty.includes(member.party)) {
-                memeberFulfilParty = true;
-            }
-
-//            if (paramFilterState == "All") {
-//                memberFulfilState = true;
-//            } else {
-//                if (member.state == paramFilterState) {
-//                    memberFulfilState = true;
+            //INCLUDES
+//            for (var i = 0; i < this.members.length; i++) {
+//                if (!this.states.includes(this.members[i].state)) {
+//                    this.states.push(this.members[i].state);
 //                }
 //            }
-//            return memeberFulfilParty && memberFulfilState
-            return memeberFulfilParty;
+//            this.states.sort();
+
+            //MAP, NEW SET, ARRAY.FROM
+            var allStates = this.members.map(function (member) {
+                return member.state;
+            })
+            this.states = Array.from(new Set(allStates)).sort();
+        },
+        memberFulfilFilters: function (member) {
+            return (this.filterState == 'All' || member.state == this.filterState) && (this.filterParty.length == 0 || this.filterParty.includes(member.party));
         }
     },
     created: function () {
         this.startFetch(this.url);
     },
     updated: function () {
-        var arrayTbodyChildNodes = Array.from(document.getElementById("congress-data").childNodes);
-        var anyTRUpdate = false;
-        arrayTbodyChildNodes.map(function (child) {
-            if (child.nodeName == "TR") {
-                anyTRUpdate = true;
-            }
-        });
-        this.anyTR = anyTRUpdate;
+        this.someTR = (Array.from(document.getElementById("congress-data").children).length !== 0);
     }
 })

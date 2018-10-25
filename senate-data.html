@@ -45,7 +45,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="lds-spinner">
+        <div class="lds-spinner" v-show="loading">
             <div></div>
             <div></div>
             <div></div>
@@ -59,7 +59,7 @@
             <div></div>
             <div></div>
         </div>
-        <div class="loadContent">
+        <div class="loadContent" v-show="!loading">
             <h2>Senators</h2>
             <p class="main_paragraf">First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S. Constitution. Each state is represented by two senators, regardless of population, who serve staggered six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet secretaries, federal judges, other federal executive officials, military officers, regulatory officials, ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the House.</p>
             <div class="filters">
@@ -89,7 +89,7 @@
                     </tr>
                 </thead>
                 <tbody id="congress-data">
-                    <tr v-for="member in members" v-if="(filterState=='All' || member.state==filterState) && memberFulfilFilters(member)">
+                    <tr v-for="member in members" v-if="memberFulfilFilters(member)">
                        <td><a v-bind:href="member.url" target="_blank">{{member.first_name}} {{member.middle_name}} {{member.last_name}}</a></td>
                        <td>{{member.party}}</td>
                        <td>{{member.state}}</td>
@@ -97,9 +97,9 @@
                        <td>{{member.votes_with_party_pct}}</td>
                     </tr>
                 </tbody>
-                <tfoot v-if="!anyTR">
+                <tfoot v-if="!someTR">
                     <tr>
-                        <td>There is no member</td>
+                        <td colspan="5">There is no member</td>
                     </tr>
                 </tfoot>
             </table>
