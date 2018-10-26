@@ -18,7 +18,7 @@
             </div>
         </div>
     </header>
-    <div class="container">
+    <div class="container" id="app">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <ul class="nav navbar-nav">
@@ -44,7 +44,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="lds-spinner">
+        <div class="lds-spinner" v-show="loading">
             <div></div>
             <div></div>
             <div></div>
@@ -58,24 +58,26 @@
             <div></div>
             <div></div>
         </div>
-        <div class="loadContent">
+        <div class="loadContent" v-show="!loading">
             <h2>Congressmen</h2>
             <p class="main_paragraf">The major power of the House is to pass federal legislation that affects the entire country, although its bills must also be passed by the Senate and further agreed to by the U.S. President before becoming law (unless both the House and Senate re-pass the legislation with a two-thirds majority in each chamber). The House has some exclusive powers: the power to initiate revenue bills, to impeach officials (impeached officials are subsequently tried in the Senate), and to elect the U.S. President in case there is no majority in the Electoral College.</p>
             <p class="main_paragraf">Each U.S. state is represented in the House in proportion to its population as measured in the census, but every state is entitled to at least one representative. </p>
             <div class="filters">
                 <div class="filterParty">
                     <label>Filter by Party:</label>
-                    <label><input type="checkbox" name="party" value="Democrat"> Democrat</label>
-                    <label><input type="checkbox" name="party" value="Republican"> Republicant</label>
-                    <label><input type="checkbox" name="party" value="Independent"> Independent</label>
+                    <label><input type="checkbox" name="party" value="D" v-model="filterParty"> Democrat</label>
+                    <label><input type="checkbox" name="party" value="R" v-model="filterParty"> Republicant</label>
+                    <label><input type="checkbox" name="party" value="I" v-model="filterParty"> Independent</label>
                 </div>
                 <div class="filterState">
                     <label>Filter by State:</label>
-                    <select name="State">
+                    <select name="State" v-model="filterState">
                         <option value="All" selected>All States</option>
+                        <option v-for="state in states" :value="state">{{state}}</option>
                     </select>
                 </div>
             </div>
+
             <table class="table tableMembers">
                 <thead>
                     <tr>
@@ -87,8 +89,19 @@
                     </tr>
                 </thead>
                 <tbody id="congress-data">
-
+                    <tr v-for="member in members" v-if="memberFulfilFilters(member)">
+                        <td><a v-bind:href="member.url" target="_blank">{{member.first_name}} {{member.middle_name}} {{member.last_name}}</a></td>
+                        <td>{{member.party}}</td>
+                        <td>{{member.state}}</td>
+                        <td>{{member.seniority}}</td>
+                        <td>{{member.votes_with_party_pct}}%</td>
+                    </tr>
                 </tbody>
+                <tfoot v-if="!someTR">
+                    <tr>
+                        <td colspan="5">There is no member</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -96,10 +109,10 @@
         <p>&copy; 2018 TGIF | All rights reserved</p>
     </footer>
 
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!--    <script src="scripts/pro-congress-113-house.js"></script>-->
-    <script src="scripts/main.js"></script>
+    <script src="scripts/main-vue.js"></script>
 </body>
 
 </html>

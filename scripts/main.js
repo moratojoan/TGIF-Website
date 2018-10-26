@@ -11,10 +11,10 @@ var page = document.querySelector('[data-page]').dataset.page;
 var url;
 if (page == "home") {
     homeMain();
-} else if (page == "senate-data" || page == "senate-attendance" || page == "senate-party-loyalty") {
+} else if (page == "senate-attendance" || page == "senate-party-loyalty") {
     url = "https://api.propublica.org/congress/v1/113/senate/members.json";
     start_fetch(url);
-} else if (page == "house-data" || page == "house-party-loyalty" || page == "house-attendance") {
+} else if (page == "house-party-loyalty" || page == "house-attendance") {
     url = "https://api.propublica.org/congress/v1/113/house/members.json";
     start_fetch(url);
 }
@@ -38,7 +38,7 @@ function start_fetch(url) {
             members = myData.results[0].members;
             main(members);
             document.getElementsByClassName("lds-spinner")[0].style.display = "none";
-            document.getElementsByClassName("loadContent")[0].style.display = "block";
+            document.getElementsByClassName("loadContent_noVue")[0].style.display = "block";
         })
         .catch(function (error) {
             console.log("Request failed: " + error.message);
@@ -61,28 +61,6 @@ function homeMain() {
 }
 
 function main(membersArray) {
-    //START PAGES: SENATE-DATA, HOUSE-DATA
-    if (page == "senate-data" || page == "house-data") {
-        //Filters by: CheckBoxes, DropDown
-        var checkBox = document.getElementsByTagName("input");
-        var select = document.getElementsByTagName("select");
-
-        for (let i = 0; i < checkBox.length; i++) {
-            checkBox[i].onchange = function () {
-                createMembersTable(membersArray, checkBox, select)
-            }
-        }
-        select[0].onchange = function () {
-            createMembersTable(membersArray, checkBox, select)
-        }
-
-        //Create DropDownMenu
-        createDropdownMenu(membersArray);
-        //Create Table
-        createMembersTable(membersArray, checkBox, select);
-    }
-    //FINISH PAGES: SENATE-DATA, HOUSE-DATA
-
     //START PAGES: SENATE/HOUSE-ATTENDANCE, SENATE/HOUSE-PARTY-LOYALTY
     if (page == "senate-attendance" || page == "senate-party-loyalty" || page == "house-attendance" || page == "house-party-loyalty") {
         //Create an array to each Party,
@@ -155,103 +133,6 @@ function moreLess(i) {
     }
 }
 //FINISH PAGE: INDEX
-
-//START PAGES: SENATE-DATA, HOUSE-DATA
-function createMembersTable(paramMembersArray, paramCheckBox, paramSelect) {
-    //Get and clear tbody
-    var tbody = document.getElementById("congress-data");
-    while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
-    }
-
-    //Get filter parameters
-    var trId = ["D", "R", "I"];
-    var filterParty = [];
-    for (let i = 0; i < paramCheckBox.length; i++) {
-        if (paramCheckBox[i].checked) {
-            filterParty.push(trId[i]);
-        }
-    }
-    var filterState = paramSelect[0].selectedOptions[0].value;
-
-    //Fill tbody
-    var keysArray = [["url", "first_name", "middle_name", "last_name"], "party", "state", "seniority", "votes_with_party_pct"];
-    for (let i = 0; i < paramMembersArray.length; i++) {
-        if (memberFulfilFilters(paramMembersArray[i], filterParty, filterState)) {
-            let tr = document.createElement("tr");
-            for (let j = 0; j < keysArray.length; j++) {
-                let td = document.createElement("td");
-                if (j === 0) {
-                    let a = document.createElement("a");
-                    a.setAttribute("href", paramMembersArray[i][keysArray[j][0]]);
-                    a.setAttribute("target", "_blank");
-                    a.textContent = paramMembersArray[i][keysArray[j][1]];
-                    if (paramMembersArray[i][keysArray[j][2]] != null) {
-                        a.textContent += " " + paramMembersArray[i][keysArray[j][2]];
-                    }
-                    a.textContent += " " + paramMembersArray[i][keysArray[j][3]];
-                    td.appendChild(a);
-                } else if (j === keysArray.length - 1) {
-                    td.textContent = paramMembersArray[i][keysArray[j]] + "%";
-                } else {
-                    td.textContent = paramMembersArray[i][keysArray[j]];
-                }
-                tr.appendChild(td);
-            }
-            tr.setAttribute("class", paramMembersArray[i].party + " " + paramMembersArray[i].state);
-            tbody.appendChild(tr);
-        }
-    }
-
-    //If there aren't any row added
-    if (!tbody.firstChild) {
-        let p = document.createElement("p");
-        p.textContent = "There is no member";
-        tbody.appendChild(p);
-    }
-}
-
-function memberFulfilFilters(member, paramFilterParty, paramFilterState) {
-    var memeberFulfilParty = false;
-    if (paramFilterParty.length == 0) {
-        memeberFulfilParty = true;
-    } else if (paramFilterParty.includes(member.party)) {
-        memeberFulfilParty = true;
-    }
-
-    var memberFulfilState = false;
-    if (paramFilterState == "All") {
-        memberFulfilState = true;
-    } else {
-        if (member.state == paramFilterState) {
-            memberFulfilState = true;
-        }
-    }
-    return memeberFulfilParty && memberFulfilState
-}
-
-function createDropdownMenu(paramMembersArray) {
-    var select = document.getElementsByTagName("select")[0];
-    var states = listStates(paramMembersArray);
-    for (var i = 0; i < states.length; i++) {
-        let option = document.createElement("option");
-        option.textContent = states[i];
-        option.setAttribute("value", states[i]);
-        select.appendChild(option);
-    }
-}
-
-function listStates(paramMembersArray) {
-    var states = [];
-    for (let i = 0; i < paramMembersArray.length; i++) {
-        if (!states.includes(paramMembersArray[i].state)) {
-            states.push(paramMembersArray[i].state);
-        }
-    }
-    states.sort();
-    return states;
-}
-//FINISH PAGES: SENATE-DATA, HOUSE-DATA
 
 //START PAGES: SENATE/HOUSE-ATTENDANCE, SENATE/HOUSE-PARTY-LOYALTY
 function getValuesArrayFromObjectsArray(objectsArray, field) {

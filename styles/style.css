@@ -89,6 +89,10 @@ label {
 }
 
 /*Loader*/
+.loadContent_noVue{
+    display: none;
+}
+
 .lds-spinner {
     color: official;
     margin: auto;

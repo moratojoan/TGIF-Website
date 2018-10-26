@@ -5,7 +5,7 @@
 var app = new Vue({
     el: "#app",
     data: {
-        url: "https://api.propublica.org/congress/v1/113/senate/members.json",
+        url: null,
         members: null,
         states: [],
         filterParty: [],
@@ -21,13 +21,11 @@ var app = new Vue({
                         "X-API-Key": "Mav6sG8mZwoWpVesShC3VKYBZtpLKchoGj4UZI49"
                     }
                 })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (myData) {
-                    app.members = myData.results[0].members;
-                    app.dropDownMenuStates();
-                    app.loading = false;
+                .then(response => response.json())
+                .then(myData => {
+                    this.members = myData.results[0].members;
+                    this.dropDownMenuStates();
+                    this.loading = false;
                 })
         },
         dropDownMenuStates: function () {
@@ -40,16 +38,31 @@ var app = new Vue({
 //            this.states.sort();
 
             //MAP, NEW SET, ARRAY.FROM
-            var allStates = this.members.map(function (member) {
-                return member.state;
-            })
-            this.states = Array.from(new Set(allStates)).sort();
+//            var allStates = this.members.map(function (member) {
+//                return member.state;
+//            })
+//            this.states = Array.from(new Set(allStates)).sort();
+
+            //MAP, NEW SET, SPREAD OPERATOR
+//            var allStates = this.members.map(function (member) {
+//                return member.state;
+//            })
+//            this.states = [... new Set(allStates)].sort();
+
+            //ARROW FUNCTION
+            this.states = [...new Set(this.members.map(member => member.state))].sort();
         },
         memberFulfilFilters: function (member) {
             return (this.filterState == 'All' || member.state == this.filterState) && (this.filterParty.length == 0 || this.filterParty.includes(member.party));
         }
     },
     created: function () {
+        var page = document.querySelector('[data-page]').dataset.page;
+        if (page == "senate-data") {
+            this.url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+        }else if(page == "house-data"){
+            this.url = "https://api.propublica.org/congress/v1/113/house/members.json";
+        }
         this.startFetch(this.url);
     },
     updated: function () {
