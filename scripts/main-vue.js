@@ -14,6 +14,14 @@ var app = new Vue({
         loading: true
     },
     methods: {
+        selectUrl: function () {
+            var page = document.querySelector('[data-page]').dataset.page;
+            if (page == "senate-data") {
+                this.url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+            } else if (page == "house-data") {
+                this.url = "https://api.propublica.org/congress/v1/113/house/members.json";
+            }
+        },
         startFetch: function (url) {
             fetch(url, {
                     method: "GET",
@@ -30,24 +38,24 @@ var app = new Vue({
         },
         dropDownMenuStates: function () {
             //INCLUDES
-//            for (var i = 0; i < this.members.length; i++) {
-//                if (!this.states.includes(this.members[i].state)) {
-//                    this.states.push(this.members[i].state);
-//                }
-//            }
-//            this.states.sort();
+            //            for (var i = 0; i < this.members.length; i++) {
+            //                if (!this.states.includes(this.members[i].state)) {
+            //                    this.states.push(this.members[i].state);
+            //                }
+            //            }
+            //            this.states.sort();
 
             //MAP, NEW SET, ARRAY.FROM
-//            var allStates = this.members.map(function (member) {
-//                return member.state;
-//            })
-//            this.states = Array.from(new Set(allStates)).sort();
+            //            var allStates = this.members.map(function (member) {
+            //                return member.state;
+            //            })
+            //            this.states = Array.from(new Set(allStates)).sort();
 
             //MAP, NEW SET, SPREAD OPERATOR
-//            var allStates = this.members.map(function (member) {
-//                return member.state;
-//            })
-//            this.states = [... new Set(allStates)].sort();
+            //            var allStates = this.members.map(function (member) {
+            //                return member.state;
+            //            })
+            //            this.states = [... new Set(allStates)].sort();
 
             //ARROW FUNCTION
             this.states = [...new Set(this.members.map(member => member.state))].sort();
@@ -57,12 +65,7 @@ var app = new Vue({
         }
     },
     created: function () {
-        var page = document.querySelector('[data-page]').dataset.page;
-        if (page == "senate-data") {
-            this.url = "https://api.propublica.org/congress/v1/113/senate/members.json";
-        }else if(page == "house-data"){
-            this.url = "https://api.propublica.org/congress/v1/113/house/members.json";
-        }
+        this.selectUrl();
         this.startFetch(this.url);
     },
     updated: function () {
