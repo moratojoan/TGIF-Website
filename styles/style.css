@@ -1,3 +1,4 @@
+/*Start: Header*/
 .my_header {
     padding: 15px 0 15px;
 }
@@ -15,7 +16,9 @@
     width: 25px;
     padding-right: 5px;
 }
+/*Final: Header*/
 
+/*Start: General*/
 .page_content {
     margin-bottom: 20px;
     display: flex;
@@ -25,23 +28,21 @@
     align-items: flex-start;
 }
 
-.government_image {
-    margin-top: 100px;
-    width: 35%;
-}
-
 .main_paragraf {
     width: 60%;
 }
 
-.tableMembers th:first-child {
-    width: 312px;
+.page_content img {
+    margin-top: 100px;
+    width: 35%;
 }
 
-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+table {
+    padding-bottom: 10px;
+}
+
+.tableMembers th:first-child {
+    width: 312px;
 }
 
 p {
@@ -50,6 +51,14 @@ p {
     text-align: justify;
 }
 
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*Final: General*/
+
+/*Start: Filters*/
 label {
     font-weight: normal;
 }
@@ -78,7 +87,9 @@ label {
     justify-content: space-between;
     align-items: baseline;
 }
+/*Final: Filters*/
 
+/*Start: Helper classes*/
 .width45 {
     width: 45%;
 }
@@ -87,9 +98,10 @@ label {
     width: 100%;
     border-bottom: solid thin;
 }
+/*Final: Helper classes*/
 
-/*Loader*/
-.loadContent_noVue{
+/*Start: Loader*/
+.loadContent_noVue {
     display: none;
 }
 
@@ -186,5 +198,42 @@ label {
         opacity: 0;
     }
 }
+/*Final: Loader*/
 
-/*Loader*/
+
+/*Start: Animations*/
+@keyframes anim {
+    0% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+td {
+    animation: anim .3s linear;
+}
+
+tfoot {
+    color: white;
+    background-color: rgba(255, 0, 0, 0.62);
+    animation: anim .3s linear;
+}
+
+@keyframes anim2 {
+    0% {
+        transform: scaleX(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+.loadContent,
+.loadContent_noVue {
+    animation: anim2 .3s linear;
+}
+/*Final: Animations*/

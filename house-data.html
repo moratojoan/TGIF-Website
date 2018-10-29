@@ -58,15 +58,17 @@
             <div></div>
             <div></div>
         </div>
-        <div class="loadContent" v-show="!loading">
-            <h2>Congressmen</h2>
-            <p class="main_paragraf">The major power of the House is to pass federal legislation that affects the entire country, although its bills must also be passed by the Senate and further agreed to by the U.S. President before becoming law (unless both the House and Senate re-pass the legislation with a two-thirds majority in each chamber). The House has some exclusive powers: the power to initiate revenue bills, to impeach officials (impeached officials are subsequently tried in the Senate), and to elect the U.S. President in case there is no majority in the Electoral College.</p>
-            <p class="main_paragraf">Each U.S. state is represented in the House in proportion to its population as measured in the census, but every state is entitled to at least one representative. </p>
+        <div class="page_content loadContent" v-show="!loading">
+            <div class="main_paragraf">
+                <h2>Congressmen</h2>
+                <p>The major power of the House is to pass federal legislation that affects the entire country, although its bills must also be passed by the Senate and further agreed to by the U.S. President before becoming law (unless both the House and Senate re-pass the legislation with a two-thirds majority in each chamber). The House has some exclusive powers: the power to initiate revenue bills, to impeach officials (impeached officials are subsequently tried in the Senate), and to elect the U.S. President in case there is no majority in the Electoral College.</p>
+                <p>Each U.S. state is represented in the House in proportion to its population as measured in the census, but every state is entitled to at least one representative. </p>
+            </div>
             <div class="filters">
                 <div class="filterParty">
                     <label>Filter by Party:</label>
                     <label><input type="checkbox" name="party" value="D" v-model="filterParty"> Democrat</label>
-                    <label><input type="checkbox" name="party" value="R" v-model="filterParty"> Republicant</label>
+                    <label><input type="checkbox" name="party" value="R" v-model="filterParty"> Republican</label>
                     <label><input type="checkbox" name="party" value="I" v-model="filterParty"> Independent</label>
                 </div>
                 <div class="filterState">
@@ -77,7 +79,6 @@
                     </select>
                 </div>
             </div>
-
             <table class="table tableMembers">
                 <thead>
                     <tr>
@@ -99,7 +100,7 @@
                 </tbody>
                 <tfoot v-if="!someTR">
                     <tr>
-                        <td colspan="5">There is no member</td>
+                        <td class="text-center" colspan="5">There is no member</td>
                     </tr>
                 </tfoot>
             </table>

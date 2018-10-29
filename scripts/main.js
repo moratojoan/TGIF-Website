@@ -159,7 +159,6 @@ function statisticsLeastMost(array, persentage, least_most, property1, property2
     if (least_most == "SmallestToHighest") {
         array.sort(function (a, b) {
             return a[property1] - b[property1];
-            //a.
         });
     } else if (least_most == "HighestToSmallest") {
         array.sort(function (a, b) {
